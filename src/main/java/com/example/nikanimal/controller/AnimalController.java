@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/animal")
 @Tag(name = "Объект животное", description = "CRUD-методы для работы объектом животное")
@@ -19,6 +21,7 @@ public class AnimalController {
     }
 
     @PostMapping
+    @Operation(summary = "Создание животного")
     public Animal create(@RequestParam @Parameter(description = "Имя животного") String name,
                          @RequestParam @Parameter(description = "Вид животного") String type,
                          @RequestParam @Parameter(description = "Возраст животного") Integer age
@@ -29,7 +32,7 @@ public class AnimalController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Получение животного по ID")
+    @Operation(summary = "Получение животного по id")
     public Animal getById(@PathVariable(value = "id") @Parameter(description = "ID-животного") Long id) {
         return animalService.getById(id);
     }
@@ -54,6 +57,10 @@ public class AnimalController {
         }
         return ResponseEntity.noContent().build();
     }
-
+    @GetMapping
+    @Operation(summary = "Получение всех животных")
+    public ResponseEntity<List<Animal>> getAll() {
+        return ResponseEntity.ok(animalService.getAll());
+    }
 
 }

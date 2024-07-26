@@ -6,6 +6,7 @@ import com.example.nikanimal.repository.AnimalRepository;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -61,4 +62,10 @@ public class AnimalServiceImpl implements AnimalService {
         }
         animalRepository.deleteById(id);
     }
+    @Override
+    public List<Animal> getAll() {
+
+        return animalRepository.findAll();
+    }
+
 }
