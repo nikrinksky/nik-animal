@@ -5,6 +5,7 @@ import com.example.nikanimal.service.AnimalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,29 +23,30 @@ public class AnimalController {
 
     @PostMapping
     @Operation(summary = "Создание животного")
-    public Animal create(@RequestParam @Parameter(description = "Имя животного") String name,
-                         @RequestParam @Parameter(description = "Вид животного") String type,
-                         @RequestParam @Parameter(description = "Возраст животного") Integer age
+    public ResponseEntity<Animal> create(@RequestParam @Parameter(description = "Имя животного") String name,
+                                         @RequestParam @Parameter(description = "Вид животного") String type,
+                                         @RequestParam @Parameter(description = "Возраст животного") Integer age
     ) {
-
-        return animalService.create(new Animal(name, type, age));
+        Animal animal = animalService.create(new Animal(name, type, age));
+        return ResponseEntity.status(HttpStatus.CREATED).body(animal);
 
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получение животного по id")
-    public Animal getById(@PathVariable(value = "id") @Parameter(description = "ID-животного") Long id) {
-        return animalService.getById(id);
+    public ResponseEntity<Animal> getById(@PathVariable(value = "id") @Parameter(description = "ID-животного") Long id) {
+        return ResponseEntity.ok(animalService.getById(id));
     }
 
     @PutMapping
     @Operation(summary = "Изменить информацию о животном")
-    public Animal update(
+    public ResponseEntity<Animal> update(
             @RequestParam @Parameter(description = "ID животного") Long id,
             @RequestParam(required = false) @Parameter(description = "Имя животного") String name,
             @RequestParam(required = false) @Parameter(description = "Вид животного") String type,
             @RequestParam(required = false) @Parameter(description = "Возраст животного") Integer age) {
-        return animalService.update(new Animal(id, name, type, age));
+        Animal animal = animalService.update(new Animal(id, name, type, age));
+        return ResponseEntity.ok(animal);
     }
 
     @DeleteMapping("/{animal_id}")

@@ -1,7 +1,7 @@
 package com.example.nikanimal.entity;
 
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 import java.util.Objects;
 

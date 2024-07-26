@@ -3,7 +3,6 @@ package com.example.nikanimal.service;
 import com.example.nikanimal.entity.Animal;
 import com.example.nikanimal.exceptions.NotFoundException;
 import com.example.nikanimal.repository.AnimalRepository;
-import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public class AnimalServiceImpl implements AnimalService {
     public Animal update(Animal animal) {
         Optional<Animal> animalId = animalRepository.findById(animal.getId());
         if (animalId.isEmpty()) {
-            throw new NotFoundException("Такого кота нет");
+            throw new NotFoundException("Такого животного нет");
         }
         Animal animalUpdate = animalId.get();
         if (animal.getName() != null) {

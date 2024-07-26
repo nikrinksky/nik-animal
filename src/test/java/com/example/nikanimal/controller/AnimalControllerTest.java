@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -34,28 +33,10 @@ class AnimalControllerTest {
     @SpyBean
     private AnimalServiceImpl animalService;
 
-    private Long id = 1L;
-    private String name = "Том";
-    private String type = "кот";
-    private int age = 3;
-
-    private Animal animalObject() {
-        Animal animal = new Animal();
-        animal.setId(id);
-        animal.setName(name);
-        animal.setType(type);
-        animal.setAge(age);
-        return animal;
-    }
-
-    public JSONObject animalJSON() {
-        JSONObject animalJSON = new JSONObject();
-        animalJSON.put("id", id);
-        animalJSON.put("name", name);
-        animalJSON.put("type", type);
-        animalJSON.put("age", age);
-        return animalJSON;
-    }
+    private static final Long ID = 1L;
+    private static final String NAME = "Том";
+    private static final String TYPE = "кот";
+    private static final int AGE = 3;
 
 
     @Test
@@ -64,16 +45,35 @@ class AnimalControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/animal")
-                        .param("id", String.valueOf(id))
-                        .param("name", name)
-                        .param("type", type)
-                        .param("age", String.valueOf(age))
+                        .param("id", String.valueOf(ID))
+                        .param("name", NAME)
+                        .param("type", TYPE)
+                        .param("age", String.valueOf(AGE))
+
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value(NAME))
+                .andExpect(jsonPath("$.age").value(AGE));
+    }
+
+    @Test
+    void update() throws Exception {
+        when(animalRepository.save(any(Animal.class))).thenReturn(animalObject());
+        when(animalRepository.findById(any(Long.class))).thenReturn(Optional.of(animalObject()));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/animal")
+                        .param("id", String.valueOf(ID))
+                        .param("name", NAME)
+                        .param("type", TYPE)
+                        .param("age", String.valueOf(AGE))
 
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(name))
-                .andExpect(jsonPath("$.age").value(age));
+                .andExpect(jsonPath("$.name").value(NAME))
+                .andExpect(jsonPath("$.age").value(AGE));
     }
 
     @Test
@@ -86,8 +86,8 @@ class AnimalControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(name))
-                .andExpect(jsonPath("$.age").value(age));
+                .andExpect(jsonPath("$.name").value(NAME))
+                .andExpect(jsonPath("$.age").value(AGE));
     }
 
     @Test
@@ -108,5 +108,23 @@ class AnimalControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    private Animal animalObject() {
+        Animal animal = new Animal();
+        animal.setId(ID);
+        animal.setName(NAME);
+        animal.setType(TYPE);
+        animal.setAge(AGE);
+        return animal;
+    }
+
+    private JSONObject animalJSON() {
+        JSONObject animalJSON = new JSONObject();
+        animalJSON.put("id", ID);
+        animalJSON.put("name", NAME);
+        animalJSON.put("type", TYPE);
+        animalJSON.put("age", AGE);
+        return animalJSON;
     }
 }
