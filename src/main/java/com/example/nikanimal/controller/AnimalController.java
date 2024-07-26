@@ -57,6 +57,7 @@ public class AnimalController {
         }
         return ResponseEntity.noContent().build();
     }
+
     @GetMapping
     @Operation(summary = "Получение всех животных")
     public ResponseEntity<List<Animal>> getAll() {

@@ -13,6 +13,7 @@ public interface AnimalService {
      * @return возвращает объект животное с присвоенным идентификатором, сохраненный в базе данных
      */
     Animal create(Animal animal);
+
     /**
      * Возвращает объект животное по его идентификатору.
      *
@@ -22,6 +23,7 @@ public interface AnimalService {
      */
 
     Animal getById(Long id);
+
     /**
      * Обновляет информацию о животном.
      *
